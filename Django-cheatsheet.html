@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>Django-Cheatsheet</title>
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center">Django-Cheatsheet</h1>
+        <h5 class="mt-5">Install latest version of python and pip install virtualenv <br>
+            1) Create virtual env:</h5>
+        <pre class="text-light bg-dark">
+            python -m virtualenv env / python -m venv env
+            env/scripts/activate.ps1 / source env/scripts/activate
+            deactivate
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>2) Installing Django</h5>
+        <pre class="text-light bg-dark">
+            pip install django
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>3) Create project:</h5>
+        <pre class="text-light bg-dark">
+            django-admin startproject (write project name)
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>4) Cd to project folder and run manage.py:</h5>
+        <pre class="text-light bg-dark">
+            python manage.py runserver
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>5) Migrate default database:</h5>
+        <pre class="text-light bg-dark">
+            python manage.py makemigrations
+            python manage.py migrate
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>6) Create super user for admin</h5>
+        <pre class="text-light bg-dark">
+            python manage.py createsuperuser
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>7) Change default database name: <br>Insert following code in urls.py of main project.</h5>
+        <pre class="text-light bg-dark">
+            admin.site.site_header = "AG Advisers Admin"
+            admin.site.site_title = "AG Advisers Admin Portal"
+            admin.site.index_title = "Welcome to AG Advisers Portal"
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>8) Create static and templates folder in main project folder <br>
+            write in settings.py
+            for static:</h5>
+        <pre class="text-light bg-dark">
+            <!-- Added manually -->
+            STATICFILES_DIRS = [
+            BASE_DIR / "static",
+            ]
+        </pre>
+        <h5>for templates:</h5>
+        <pre class="text-light bg-dark">
+            'DIRS': [BASE_DIR / "templates"],
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>9) Create requirements.txt</h5>
+        <pre class="text-light bg-dark">
+            pip freeze> requirements.txt
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>10) App creation:</h5>
+        <pre class="text-light bg-dark">
+            python manage.py startapp (name of app)
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>11) URL Dispatching: <br>
+            i) Entry in URLs.py in project folder: <br>
+            Here, we define a path of homepage to app urls.py, enter following command in url patterns:</h5>
+        <pre class="text-light bg-dark">
+            path('', include('home.urls'))
+        </pre>
+
+        <h5>ii) Entry in URLs.py in app folder:
+            <br> Here, we define views for every path:
+        </h5>
+        <pre class="text-light bg-dark">
+            from django.contrib import admin
+            from django.urls import path
+            from home import views
+
+
+            urlpatterns = [
+
+            path('', views.index, name='home'),
+            path('about/', views.about, name='about'),
+            path('services/', views.services, name='services'),
+            path('services/&lt;serviceid&gt;',views.servicesDetails, name='servicesDetails'),
+            path('contact/', views.contact, name='contact')
+            ]
+        </pre>
+
+        <h5>iii) Entry in views.py in app folder: <br>
+            Here, we define what content/content link to be render when someone reaches url:</h5>
+        <pre class="text-light bg-dark">
+            from django.http import request,
+            from django.shortcuts import render
+
+            def about(request):
+            return render(request, "index.html")
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>12) Entering a variable in html file: <br>
+            Assign variable in views.py:</h5>
+        <pre class="text-light bg-dark">
+            def index(request):
+            data = {
+                'title': 'Home New',
+                'bdata': 'Hi my name is Apoorv'
+            }
+            return render(request, "index.html", data)
+        <h5>Then enter variable at desired place {{title}} in html</h5>
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>13) Create base.html template and add header and footer from index.html and then in between enter the
+            following code: </h5>
+        <pre class="text-light bg-dark">
+            {% block content %}
+            {% endblock %}
+
+            {% block title %}
+            {% endblock %}
+        </pre>
+
+        <h5>Then in index.html or about.html or in any file</h5>
+        <pre class="text-light bg-dark">
+            {% extends "base.html" %}
+            {% block title %}
+
+            (Write title here)
+            {% endblock %}
+
+            {% block content %}
+	
+            (Write content body in the middle of this)
+            {% endblock %}
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>14) Connecting forms: <br>
+            Add name attribute in form div class. Django will understand field with name attribute</h5>
+        <pre class="text-light bg-dark">
+            name = ‘name’
+            email = ‘email’
+        </pre>
+
+        <h5>Also add this in form class:</h5>
+        <pre class="text-light bg-dark">
+            &lt;form class="method="post" action="/"&gt
+                {% csrf_token %}  -(csrf is used to prevent hackers)
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>15) Creation and Registration of Models: (Models will be created and then make migrations and then migrate.)
+            <br> Model is something that defines your database.
+            <br>
+            i) Models in made in class (which is a table of database)
+        </h5>
+        <pre class="text-light bg-dark">
+            class home(models.Model):
+            name=models.CharField(max_length=122)
+	        email=models.CharField(max_length=122)
+	        address=models.CharField(max_length=255)
+	        city=models.CharField(max_length=15)
+	        date=models.DateField()
+        </pre>
+
+        <h5>This following function will store data in database by name:</h5>
+        <pre class="text-light bg-dark">
+            def __str__(self):
+            return self.name
+        </pre>
+
+        <h5>ii) Register your model in admin.py:</h5>
+        <pre class="text-light bg-dark">
+            from home.models import home
+            <!-- # Register your models here. -->
+            admin.site.register(home)
+        </pre>
+
+        <h5>iii) Register your app:</h5>
+        <pre class="text-light bg-dark">
+            Copy class name from apps.py: HomeConfig
+            and paste in Installed apps section (App_name.apps filename.Classname): 
+            'home.apps.HomeConfig',
+        </pre>
+
+        <pre class="text-light bg-dark">
+            then run,  python manage.py makemigrations
+            this will generate migration file – create changes and store in a file
+
+            Then, run python manage.py migrate
+            this will apply pending changes made my makemigration and create table.
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>16) Adding data in table:</h5>
+        <pre class="text-light bg-dark">
+            from datetime import datetime
+            from home.models import home
+
+            def index(request):
+                if request.method =="POST":
+                    name=request.POST.get('name')
+                    email=request.POST.get('email')
+                    address=request.POST.get('address')
+                    city=request.POST.get('city')
+                    Home=home(name=name,email=email,address=address,city=city,date=datetime.today())
+                    Home.save()
+                    
+                return render(request, "index.html", data)
+
+        </pre>
+    </div>
+
+    <div class="container my-5">
+        <h5>17) Using message framework: <br>
+            In views.py:</h5>
+        <pre class="text-light bg-dark">
+            from django.contrib import messages
+        </pre>
+
+        <h5>Enter the following message in POST method already made for from <br></h5>
+        <pre class="text-light bg-dark">
+            messages.success(request, 'Your form is successfully submitted!')
+        </pre>
+
+        <h5>Copy the following in index.html or base.html or concerning template: <br>
+            This will work on bootstrap.</h5>
+        <pre class="text-light bg-dark">
+            {% if messages %}
+            {% for message in messages %}
+            &lt;div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"&gt;
+            &lt;strong&gt;{{ message }}&lt;/strong&gt;
+            &lt;button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&lt;/button&gt;
+            &lt;/div&gt;
+            {% endfor %}
+            {% endif %}
+        </pre>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
